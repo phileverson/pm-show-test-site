@@ -10,8 +10,9 @@
   <body>
 <div class="panel">
   <h5 style="font-weight: bold">pm-show: Restuarant Site 1</h5>
-  <p>Currently Displaying: Master <a href="#" class="tiny button" id="switch-branch">Switch to Dev</a> </p>
+  <p>Currently Displaying: Master <a href="/execute.php?newBranch=dev-1" class="tiny button" id="switch-branch">Switch to Dev</a> </p>
 </div>
+
 <!-- <a data-dropdown="drop1" aria-controls="drop1" aria-expanded="false">Has Dropdown</a>
 <ul id="drop1" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
   <li><a href="#">This is a link</a></li>
@@ -22,16 +23,25 @@
 <div id="drop2" data-dropdown-content class="f-dropdown content" aria-hidden="true" tabindex="-1">
   <p>Some text that people will think is awesome! Some text that people will think is awesome! Some text that people will think is awesome!</p>
 </div> -->
+
     <script src="js/vendor/jquery.js"></script>
     <script src="js/foundation.min.js"></script>
     <script>
       $(document).foundation();
     </script>
     <script type="text/javascript">
-    $('#switch-branch').click(function(){
-    	alert('putting through post');
-    	$.post( '/execute.php', { newBranch: 'dev-2' } );
-    })
+
+    // $('#switch-branch').click(function(){
+    // 	alert('putting through post');
+    // 	$.post( '/execute.php', { newBranch: 'dev-2' } );
+    // })
+
+$('#switch-branch').click(function(event) {
+    event.preventDefault();
+    window.open($(this).attr("href"), "popupWindow", "width=600,height=600,scrollbars=yes");
+});
+
+
     </script>
   </body>
 </html>

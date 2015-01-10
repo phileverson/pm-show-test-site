@@ -9,7 +9,7 @@
 
 	// The commands
 
-	$newBranch = $_POST['newBranch'];
+	$newBranch = $_GET['newBranch'];
 
 echo $newBranch;
 
