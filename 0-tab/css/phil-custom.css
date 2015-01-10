@@ -1,0 +1,47 @@
+.tab-top-container {
+	background-color: #f2f2f2;
+}
+
+.bottom-hold {
+	background-color: #333333;
+	color: #FFFFFF;
+	height: 10px;
+	position: absolute;
+	bottom: 0px;
+}
+
+.nav-legend {
+	font-weight: bold !important;
+}
+
+.in-table {
+	margin-bottom: 0; 
+	margin-right: 5px;
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
+
+.no-pad-left {
+padding-left: 0px;
+}
+
+.no-pad-right {
+padding-right: 0px;
+}
+
+td {
+	padding-top: 3px !important;
+	padding-bottom: 3px !important;
+	font-size: 11px !important;
+}
+
+.dev-status-label {
+	margin-left: 5px;
+}
+
+.env-list {
+	height: 30px;
+	line-height: 30px !important;
+}
