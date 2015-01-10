@@ -10,7 +10,7 @@
   <body>
 <div class="panel">
   <h5 style="font-weight: bold">pm-show: Restuarant Site 1</h5>
-  <p>Currently Displaying: Master <a href="/execute.php?newBranch=dev-1" class="tiny button" id="switch-branch">Switch to Dev</a> </p>
+  <p>Currently Displaying: Master <a href="execute.php?newBranch=dev-1" class="tiny button" id="switch-branch">Switch to Dev</a> </p>
 </div>
 
 <!-- <a data-dropdown="drop1" aria-controls="drop1" aria-expanded="false">Has Dropdown</a>
