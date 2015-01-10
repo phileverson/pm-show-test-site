@@ -22,7 +22,7 @@ echo '<span id="currentBranchOutput">' . $output . '</span>';
             <!-- Title Area -->
             <li class="name">
                 <h1>
-                    <a href="#">pm-show: Restuarant Site 1</a>
+                    <a href="#">Project Overview: Restuarant Site 1</a>
                 </h1>
             </li>
             <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
@@ -56,7 +56,7 @@ echo '<span id="currentBranchOutput">' . $output . '</span>';
         <table class="large-12">
             <thead>
                 <tr>
-                    <td>
+                    <td colspan="2">
                         Project Tasks/Milestones:
                     </td>
                 </tr>
@@ -150,6 +150,11 @@ function getGitHubCommits (branch, taskID, callback) {
             $('#label-' + taskID).text('Not Started');
             $('#label-' + taskID).addClass('alert');
             $('#label-' + taskID).css('opacity','1');
+            $('#switch-branch-' + taskID).text('No Progress to View');
+            $('#switch-branch-' + taskID).addClass('disabled');
+            $('#switch-branch-' + taskID).removeAttr("href");
+            $('#switch-branch-' + taskID).css('display', 'none');
+
     });
 
 }
@@ -182,8 +187,9 @@ function makeTable (asanaTasks) {
     var rowsHTML = '';
     for (var i = 0; i < numTasks; i++) {
         taskID = arrayTasks[i].name.substring(0, 3);
-        rowsHTML += '<tr><td>';
-        rowsHTML += '<a href="execute.php?newBranch=task/' + taskID + '" class="tiny button in-table" id="switch-branch-' + taskID + '">View Progress</a>';
+        rowsHTML += '<tr><td style="width: 10px">';
+        rowsHTML += '<a href="execute.php?newBranch=task/' + taskID + '" class="tiny button in-table" id="switch-branch-' + taskID + '">View&nbsp;Progress</a>';
+        rowsHTML += '</td><td>';
         rowsHTML += arrayTasks[i].name;
         var branch = 'task/' + taskID;
 
