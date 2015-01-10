@@ -30,9 +30,9 @@
                     <a href="#" class="nav-legend">Enviorment: </a>
                 </li>
                 <li class="has-dropdown not-click">
-                    <a href="#">Single Task</a>
+                    <a href="#">Individual Task</a>
                     <ul class="dropdown">
-                        <li><a href="#" class="env-list">Single Task</a></li>
+                        <li><a href="#" class="env-list">Individual Task</a></li>
                         <li class="divider"></li>
                         <li><a href="#" class="env-list">DEV Testing</a></li>
                         <li class="divider"></li>
@@ -95,6 +95,36 @@ asana.request("GET", "projects/23796687427088/tasks", function(err, response) {
         else makeTable(response)
     })
 
+function getGitHubCommits (branch, callback) {
+    var request = new XMLHttpRequest();
+    // Set the event handler
+    // request.onload = function(){return request.responseText;};
+    // Initialize the request
+    request.open('get', 'https://api.github.com/repos/phileverson/pm-show-test-site/commits?sha=' + branch, true)
+
+    request.onreadystatechange=function() {     
+        if (request.readyState==4) {
+            if (request.status == 200) {
+
+                // pass the response to the callback function
+                callback(null, request.responseText);
+
+            } else {
+                // pass the error to the callback function
+                console.log('now in error');
+                callback(true);
+            }
+        }
+    }
+    // Fire away!
+    request.send()
+}
+
+function tagsFromCommits (gitHubCommits) {
+    var numCommits = gitHubCommits.length;
+    return numCommits;
+}
+
 function makeTable (asanaTasks) {
     var numTasks = asanaTasks.data.length;
     var arrayTasks = asanaTasks.data;
@@ -105,16 +135,22 @@ function makeTable (asanaTasks) {
         rowsHTML += '<tr><td>';
         rowsHTML += '<a href="execute.php?newBranch=task/' + taskID + '" class="tiny button in-table" id="switch-branch">View Progress</a>';
         rowsHTML += arrayTasks[i].name;
-        rowsHTML += '<span class="round label right dev-status-label">Dev Done</span>';
+        var branch = 'task/' + taskID;
+        
+        getGitHubCommits(branch, function(err, response) { // pass an anonymous function
+            if (err) {
+                console.log( "error");
+
+            } else {
+                console.log(tagsFromCommits(jQuery.parseJSON(response)));
+            } 
+        });
+
+        rowsHTML += '<span class="round label secondary right dev-status-label">Dev Done</span>';
         rowsHTML += '</td></tr>';
     };
-
-    // $('#asanaTasks').html('hi');
+    // adding the rows we've made to the page.
     $('#asanaTasks').html(rowsHTML);
-
-
-    // var asanaTasksArray = JSON.parse(asanaTasks);
-    // console.log(asanaTasksArray);
 }
 </script>
 
