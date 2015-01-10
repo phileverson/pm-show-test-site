@@ -8,10 +8,15 @@
 	 */
 
 	// The commands
+
+	$newBranch = $_POST['newBranch'];
+
+echo $newBranch;
+
 	$commands = array(
 		'echo $PWD',
 		'whoami',
-		'git checkout dev-1',
+		'git checkout ' . $newBranch,
 		'git pull',
 		// 'git pull',
 		// 'git status',
