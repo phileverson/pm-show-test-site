@@ -42,8 +42,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundation | Welcome</title>
-    <link rel="stylesheet" href="css/foundation.css" />
-    <link rel="stylesheet" href="css/phil-custom.css" />
+    <link rel="stylesheet" href="pm-show/css/foundation.css" />
+    <link rel="stylesheet" href="pm-show/css/phil-custom.css" />
     <script src="js/vendor/modernizr.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="asana-api-cors.js"></script>
