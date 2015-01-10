@@ -1,3 +1,9 @@
+<?php
+$tmp = shell_exec('git rev-parse --abbrev-ref HEAD');
+$output = htmlentities(trim($tmp));
+echo '<span id="currentBranchOutput">' . $output . '</span>';
+?>
+
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
@@ -30,15 +36,15 @@
                     <a href="#" class="nav-legend">Enviorment: </a>
                 </li>
                 <li class="has-dropdown not-click">
-                    <a href="#">Individual Task</a>
+                    <a href="#" id="currentBranchNav"></a>
                     <ul class="dropdown">
-                        <li><a href="#" class="env-list">Individual Task</a></li>
+                        <li><a href="execute.php?newBranch=master" class="env-list">Production</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" class="env-list">DEV Testing</a></li>
+                        <li><a href="execute.php?newBranch=DEV" class="env-list">DEV Testing</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" class="env-list">QA</a></li>
+                        <li><a href="execute.php?newBranch=QA" class="env-list">QA</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" class="env-list">UAT/Staging</a></li>
+                        <li><a href="execute.php?newBranch=UAT" class="env-list">UAT/Staging</a></li>
                     </ul>
                 </li>
                 <li class="divider"></li>
@@ -46,7 +52,7 @@
         </section>
     </nav>
 
-    <div class="large-12 columns tab-top-container">
+    <div class="large-12 columns tab-top-container no-pad-left no-pad-right">
         <table class="large-12">
             <thead>
                 <tr>
@@ -81,7 +87,6 @@ This is longer Content Goes Here Donec id elit non mi porta gravida at eget metu
 
 </div>
 
-
 <!-- I NEED THIS LINK ADDRESS LATER....  execute.php?newBranch=dev-1   -->
 
 <script>
@@ -95,34 +100,79 @@ asana.request("GET", "projects/23796687427088/tasks", function(err, response) {
         else makeTable(response)
     })
 
-function getGitHubCommits (branch, callback) {
-    var request = new XMLHttpRequest();
-    // Set the event handler
-    // request.onload = function(){return request.responseText;};
-    // Initialize the request
-    request.open('get', 'https://api.github.com/repos/phileverson/pm-show-test-site/commits?sha=' + branch, true)
+var currentBranch = $('#currentBranchOutput').text()
+if(currentBranch == 'master')
+{
+    currentBranch = 'Production';
+}
+// var currentBranch = 'task/001';
+$('#currentBranchNav').text(currentBranch);
 
-    request.onreadystatechange=function() {     
-        if (request.readyState==4) {
-            if (request.status == 200) {
 
-                // pass the response to the callback function
-                callback(null, request.responseText);
-
-            } else {
-                // pass the error to the callback function
-                console.log('now in error');
-                callback(true);
-            }
-        }
+function updateBranchButtons ()
+{
+    if(currentBranch.search('task') >= 0)
+    {
+        var branchTaskID = currentBranch.substring(5,8);
+        console.log(branchTaskID);
+        $('#switch-branch-' + branchTaskID).text('Currently Viewing');
+        $('#switch-branch-' + branchTaskID).addClass('disabled');
     }
-    // Fire away!
-    request.send()
+}
+
+function getGitHubCommits (branch, taskID, callback) {
+    $.ajax
+    ({
+        type: "GET",
+        url: "https://api.github.com/repos/phileverson/pm-show-test-site/commits?sha=task/" + taskID,
+        dataType: 'json',
+        async: false,
+        headers: {
+        "Authorization": "Basic " + btoa('5a8ed8ea12397e217c39a0ac846a175946518597')
+    }
+    })
+    .done(function( msg ) {
+        var taskStatusLabel = tagsFromCommits(msg);
+        if(taskStatusLabel == 'Started')
+        {
+            $('#label-' + taskID).text(taskStatusLabel);
+            $('#label-' + taskID).addClass('secondary');
+            $('#label-' + taskID).css('opacity','1');
+        }
+        else(taskStatusLabel.length > 1 && taskStatusLabel != 'Started')
+        {
+            $('#label-' + taskID).text(taskStatusLabel);
+            $('#label-' + taskID).addClass('success');
+            $('#label-' + taskID).css('opacity','1');
+        }
+    })
+    .fail(function(){
+            $('#label-' + taskID).text('Not Started');
+            $('#label-' + taskID).addClass('alert');
+            $('#label-' + taskID).css('opacity','1');
+    });
+
 }
 
 function tagsFromCommits (gitHubCommits) {
     var numCommits = gitHubCommits.length;
-    return numCommits;
+    for (var i = 0; i < numCommits; i++) {
+        console.log(gitHubCommits[i].commit.message);
+        var commitMsg = gitHubCommits[i].commit.message;
+        if(commitMsg.search('#DevDone') >= 0)
+        {
+            return 'Dev Done';
+        }
+        if(commitMsg.search('#QADone') >= 0)
+        {
+            return 'QA Done';
+        }
+        if(commitMsg.search('#ForUAT') >= 0)
+        {
+            return 'Ready For UAT';
+        }   
+    }
+    return 'Started';
 }
 
 function makeTable (asanaTasks) {
@@ -133,24 +183,23 @@ function makeTable (asanaTasks) {
     for (var i = 0; i < numTasks; i++) {
         taskID = arrayTasks[i].name.substring(0, 3);
         rowsHTML += '<tr><td>';
-        rowsHTML += '<a href="execute.php?newBranch=task/' + taskID + '" class="tiny button in-table" id="switch-branch">View Progress</a>';
+        rowsHTML += '<a href="execute.php?newBranch=task/' + taskID + '" class="tiny button in-table" id="switch-branch-' + taskID + '">View Progress</a>';
         rowsHTML += arrayTasks[i].name;
         var branch = 'task/' + taskID;
-        
-        getGitHubCommits(branch, function(err, response) { // pass an anonymous function
-            if (err) {
-                console.log( "error");
 
-            } else {
-                console.log(tagsFromCommits(jQuery.parseJSON(response)));
-            } 
-        });
-
-        rowsHTML += '<span class="round label secondary right dev-status-label">Dev Done</span>';
+        rowsHTML += '<span class="round label right dev-status-label" id="label-' + taskID + '"></span>';
         rowsHTML += '</td></tr>';
-    };
+    }
     // adding the rows we've made to the page.
     $('#asanaTasks').html(rowsHTML);
+    updateBranchButtons();
+
+    for (var j = 0; j < numTasks; j++) {
+        var taskID = arrayTasks[j].name.substring(0, 3);
+        var branch = 'task/' + taskID;
+        getGitHubCommits(branch, taskID);
+    }
+
 }
 </script>
 
