@@ -1,7 +1,7 @@
 <?php
 $tmp = shell_exec('git rev-parse --abbrev-ref HEAD');
 $output = htmlentities(trim($tmp));
-echo '<span id="currentBranchOutput">' . $output . '</span>';
+echo '<span id="currentBranchOutput" style="display:none">' . $output . '</span>';
 ?>
 
 <!doctype html>

@@ -11,7 +11,6 @@
 
 	$newBranch = $_GET['newBranch'];
 
-echo $newBranch;
 
 	$commands = array(
 		'echo $PWD',
@@ -61,38 +60,26 @@ echo $newBranch;
             <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
         </ul>
 
-        <section class="top-bar-section">
-            <!-- Right Nav Section -->
-            <ul class="right">
-                <li class="divider"></li>
-                <li>
-                    <a href="#" class="nav-legend">Enviorment: </a>
-                </li>
-                <li class="has-dropdown not-click">
-                    <a href="#" id="currentBranchNav"></a>
-                    <ul class="dropdown">
-                        <li><a href="execute.php?newBranch=master" class="env-list">Production</a></li>
-                        <li class="divider"></li>
-                        <li><a href="execute.php?newBranch=DEV" class="env-list">DEV Testing</a></li>
-                        <li class="divider"></li>
-                        <li><a href="execute.php?newBranch=QA" class="env-list">QA</a></li>
-                        <li class="divider"></li>
-                        <li><a href="execute.php?newBranch=UAT" class="env-list">UAT/Staging</a></li>
-                    </ul>
-                </li>
-                <li class="divider"></li>
-            </ul>
-        </section>
+        <!--  -->
     </nav>
-    
+    <div class="large-12 columns tab-top-container" style="margin-top:15px">
+<!-- <div data-alert="" class="alert-box success">
+  Loading <?php echo $newBranch ?> ... Please wait.  -->
+  <script type="text/javascript">
+window.top.location.reload()
+  </script>
+  <!-- <a href="" class="close">×</a> -->
+<!-- </div> -->
+</div>
+
 <pre>
- .  ____  .    ____________________________
+<!--  .  ____  .    ____________________________
  |/      \|   |                            |
 [| <span style="color: #FF0000;">&hearts;    &hearts;</span> |]  | Git Deployment Script v0.1 |
  |___==___|  /              &copy; oodavid 2012 |
               |____________________________|
 
-<?php echo $output; ?>
+<?php echo $output; ?> -->
 </pre>
 
     <script src="js/vendor/jquery.js"></script>
